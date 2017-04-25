@@ -28,9 +28,9 @@ def search(title="",author="",year="",isbn=""):
     conn=sqlite3.connect("books.db")
     cur=conn.cursor()
     #Input the SQL query to execute on the db/table here
-    cur.execute("SELECT * from book where title=? OR author=? or year=? or isbn=?",(title,author,year,isbn))
-    rows=cur.fetchall()
-    conn.close()
+    cur.execute("SELECT * from book where title=? OR author=? or year=? or isbn=?",(title,author,year,isbn))#String formatting/string substition
+    rows=cur.fetchall()#Fetch all the sql results from the sql execute command
+    conn.close() #close the sqlite3 connection - notice no commit here- as just receiving data
     return rows
 
 def viewall():
@@ -42,11 +42,20 @@ def viewall():
     conn.close()
     return rows
 
-def delete(title,author,year,isbn):
+def delete(id):
     #Function to delete an records
     conn=sqlite3.connect("books.db")
     cur=conn.cursor()
     #Input the SQL query to execute on the db/table here
+    cur.execute("DELETE FROM book WHERE ID=?",(id,))
+    conn.commit()
+    conn.close()
+
+def update(id,title,author,year,isbn):
+    conn=sqlite3.connect("books.db")
+    cur=conn.cursor()
+    #Input the SQL query to execute on the db/table here
+    cur.execute("UPDATE book SET title=?,author=?,year=?,isbn=? where id=?"(title,author,year,isbn))
     conn.commit()
     conn.close()
 
@@ -56,7 +65,9 @@ def close():
 
 
 #Connect to the sqlite3 db and create the table book - with the relevant schema.
+"""
+insert("The Princess","Lilly Morrin",2012,192345678)
 connect()
-insert("The sea","Henry Morrin", 1918,19312812)
+
 print(viewall())
-print(search("Henry Morrin"))
+"""
